@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://testuser:testpassword@db:5432/testdb"
+    volumes:
+    - .:/src
+   
+    #command: fastapi dev src/
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+  
+
+  db:
+    image: postgres:15
+    container_name: fastapi_postgres_db
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+      #- ./db_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

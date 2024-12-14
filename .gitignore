@@ -1,0 +1,6 @@
+Pipfile
+Pipfile.lock
+test.db
+backend/.env
+__pycache__/
+.mypy_cache
